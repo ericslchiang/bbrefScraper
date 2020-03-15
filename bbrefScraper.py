@@ -9,9 +9,9 @@ while (flag):
         player = input('Enter player\'s first and last name in that order (eg. Michael Jordan)\n')
         flag = False
     elif mode == '2':
-        year == input('Enter season year\n')
+        year = input('Enter season year\n')
         flag = False
     else:
         print('Invalid Option\n')
 
-scraper.scrapePlayer(player)
+scraper.scrapeSeason(year)

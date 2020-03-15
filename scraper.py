@@ -9,6 +9,7 @@ import pprint
 BASE_URL = 'https://www.basketball-reference.com'
 pp = pprint.PrettyPrinter(indent=4)
 
+
 def scrapePlayer(name):
     flName = name.strip().lower().split()
     # Have to figure out how to check for players with same names (eg. Gary Payton)
@@ -17,7 +18,7 @@ def scrapePlayer(name):
     soup = BeautifulSoup(request.content, 'html.parser')
 
     perGameElem = soup.find('div', id='all_per_game')
-    perGameStats = [] 
+    perGameStats = []
     for category in perGameElem.find('thead').findAll('th'):
         perGameStats.append(category.getText())
     perGameStatRow = perGameElem.find('tbody').findAll('tr')
@@ -28,18 +29,29 @@ def scrapePlayer(name):
         for child in row.children:
             temp.append(child.getText())
         rowData.append(temp)
-    
+
     data = pd.DataFrame(data=rowData, columns=perGameStats)
     data.to_excel('output.xlsx')
 
-    
-
-
-
-
 
 def scrapeSeason(year):
-    print('aa')
+    yearUrl = '/'.join([BASE_URL, 'leagues', f'NBA_{year}_per_game.html'])
+    request = requests.get(yearUrl)
+    soup = BeautifulSoup(request.content, 'html.parser')
 
+    dataTableElem = soup.find('div', id='all_per_game_stats')
+    print(dataTableElem)
+    perGameStats = []
+    for category in dataTableElem.find('thead').findAll('th'):
+        perGameStats.append(category.getText())
 
+    perGameStatRow = dataTableElem.find('tbody').findAll('tr', class_='full_table')
+    rowData = []
+    for row in perGameStatRow:
+        temp = []
+        for child in row.children:
+            temp.append(child.getText())
+        rowData.append(temp)
 
+    data = pd.DataFrame(data=rowData, columns=perGameStats)
+    data.to_excel('output.xlsx')
