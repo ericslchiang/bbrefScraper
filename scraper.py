@@ -30,7 +30,7 @@ def scrapePlayer(name):
             rowData.append(temp)
 
         data = pd.DataFrame(data=rowData, columns=perGameStats)
-        data.to_excel('output.xlsx')
+        data.to_csv(path_or_buf=f'./output/NBA_{name}.csv', index=False)
     except Exception as ex:
         print(ex)
 
@@ -58,6 +58,6 @@ def scrapeSeason(year):
             rowData.append(temp)
 
         data = pd.DataFrame(data=rowData, columns=perGameStats)
-        data.to_excel('output.xlsx')
+        data.to_csv(path_or_buf=f'./output/NBA_{year}_Season.csv', index=False)
     except Exception as ex:
         print(ex)
